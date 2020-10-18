@@ -3,6 +3,7 @@
 var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 
 var cors = require('cors');
 
@@ -18,6 +19,10 @@ app.use(cors());
 
 /** this project needs to parse POST bodies **/
 // you should mount the body-parser here
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+app.post('/api/shorturl/new', urlencodedParser, function (req, res) {
+  res.send('the new url is ' + req.body.url);
+})
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
