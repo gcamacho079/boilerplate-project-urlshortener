@@ -4,6 +4,7 @@ var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var dns = require('dns');
 
 var cors = require('cors');
 
@@ -17,11 +18,26 @@ var port = process.env.PORT || 3000;
 
 app.use(cors());
 
+var getHostname = function (url) {
+  var protocolRegex = /^https?:\/\//i;
+  return url.replace(protocolRegex, '');
+};
+
 /** this project needs to parse POST bodies **/
 // you should mount the body-parser here
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.post('/api/shorturl/new', urlencodedParser, function (req, res) {
-  res.send('the new url is ' + req.body.url);
+  var url = getHostname(req.body.url);
+  var options = {
+    family: 6,
+  };
+  
+  dns.lookup(url, options, function (err, addresses, family) {
+    if (err) console.log(err);
+    console.log(addresses);
+    console.log(family);
+    res.send('the new url is ' + url);
+  });
 })
 
 app.use('/public', express.static(process.cwd() + '/public'));
