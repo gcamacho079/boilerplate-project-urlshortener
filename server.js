@@ -6,15 +6,15 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var dns = require('dns');
 
+// Connect to database
+require('./initDB')();
+
 var cors = require('cors');
 
 var app = express();
 
 // Basic Configuration 
 var port = process.env.PORT || 3000;
-
-/** this project needs a db !! **/ 
-// mongoose.connect(process.env.DB_URI);
 
 app.use(cors());
 
