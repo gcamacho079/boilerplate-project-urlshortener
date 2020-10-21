@@ -1,10 +1,9 @@
 'use strict';
 
 var express = require('express');
-var mongo = require('mongodb');
-var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var dns = require('dns');
+const db = require('./database/functions');
 
 // Connect to database
 require('./initDB')();
@@ -29,13 +28,13 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.post('/api/shorturl/new', urlencodedParser, function (req, res) {
   var url = getHostname(req.body.url);
   var options = {
-    family: 6,
+    all: true,
   };
   
   dns.lookup(url, options, function (err, addresses, family) {
     if (err) console.log(err);
-    console.log(addresses);
-    console.log(family);
+    const record = db.addNewUrl(url);
+    console.log(record);
     res.send('the new url is ' + url);
   });
 })

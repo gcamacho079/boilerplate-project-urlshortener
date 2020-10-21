@@ -1,4 +1,4 @@
-const { connect, connection } = require('mongoose');
+const { connect } = require('mongoose');
 const { config } = require('dotenv'); 
 
 module.exports = () => {
