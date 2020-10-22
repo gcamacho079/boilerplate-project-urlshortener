@@ -6,7 +6,10 @@ var dns = require('dns');
 const db = require('./database/functions');
 
 // Connect to database
-require('./initDB')();
+require('./database/init')();
+
+// Initialize incrementing counter
+db.initializeCounter();
 
 var cors = require('cors');
 

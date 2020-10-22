@@ -6,7 +6,7 @@ module.exports = () => {
   const uri = process.env.DB_URI;
 
   connect(uri)
-  .then(() => {
+  .then((db) => {
     console.log('Connection estabislished with MongoDB');
   })
   .catch(error => console.error(error.message));
