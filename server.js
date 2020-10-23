@@ -4,6 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var dns = require('dns');
 const db = require('./database/functions');
+var mongoose = require('mongoose');
 
 // Connect to database
 require('./database/init')();
