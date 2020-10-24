@@ -1,7 +1,10 @@
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 
-const schema = new mongoose.Schema({ url: 'string'});
+const schema = new mongoose.Schema({ 
+  url: String,
+  index: Number,
+});
 const Link = mongoose.model('Link', schema);
 
 /* Counter */
@@ -10,10 +13,13 @@ const counterSchema = new mongoose.Schema({
   seq: Number,
 });
 
+// Record where counter is stored
+const countFilter = { _id: 'url_id' };
+
 const Counter = mongoose.model('Counter', counterSchema);
 
 exports.initializeCounter = () => {
-  Counter.findOne({ _id: 'url_id' }, (err, docs) => {
+  Counter.findOne(countFilter, (err, docs) => {
     if (err) console.log(err);
     
     if (docs) {
@@ -39,10 +45,30 @@ exports.initializeCounter = () => {
 
 /* Links */
 exports.addNewUrl = (url) => {
-  const newUrl = new Link({ url: url });
+  const options = {
+    new: true,
+  }
 
-  newUrl.save((err, data) => {
-    if (err) console.log(err);
-    return data;
-  });
+  Counter.findById('url_id')
+    .then((data) => {
+      return data.seq;
+    })
+    .then((count) => {
+      const update = {
+        seq: count + 1
+      };
+
+      const newUrl = new Link({ 
+        index: count,
+        url: url,
+      });
+      newUrl.save((err, data) => {
+        if (err) console.log(err);
+        
+        Counter.findOneAndUpdate(countFilter, update, (err, data) => {
+          if (err) console.log(err);
+          return data;
+        });
+      });
+    });
 };
