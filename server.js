@@ -22,8 +22,8 @@ var port = process.env.PORT || 3000;
 app.use(cors());
 
 var getHostname = function (url) {
-  var protocolRegex = /^https?:\/\//i;
-  return url.replace(protocolRegex, '');
+  const myUrl = new URL(url);
+  return myUrl.hostname;
 };
 
 /** this project needs to parse POST bodies **/

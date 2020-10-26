@@ -1,5 +1,6 @@
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
+mongoose.set('useFindAndModify', false);
 
 const schema = new mongoose.Schema({ 
   url: String,
@@ -45,10 +46,6 @@ exports.initializeCounter = () => {
 
 /* Links */
 exports.addNewUrl = (url) => {
-  const options = {
-    new: true,
-  }
-
   Counter.findById('url_id')
     .then((data) => {
       return data.seq;
@@ -62,6 +59,7 @@ exports.addNewUrl = (url) => {
         index: count,
         url: url,
       });
+
       newUrl.save((err, data) => {
         if (err) console.log(err);
         
