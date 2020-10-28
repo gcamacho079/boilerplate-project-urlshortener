@@ -37,9 +37,10 @@ app.post('/api/shorturl/new', urlencodedParser, function (req, res) {
   
   dns.lookup(url, options, function (err, addresses, family) {
     if (err) console.log(err);
-    const record = db.addNewUrl(url);
-    console.log(record);
-    res.send('the new url is ' + url);
+    db.addNewUrl(url)
+      .then((url) => {
+        res.send('the new url is ' + url);
+      });    
   });
 })
 

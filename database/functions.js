@@ -46,7 +46,8 @@ exports.initializeCounter = () => {
 
 /* Links */
 exports.addNewUrl = (url) => {
-  Counter.findById('url_id')
+  return new Promise((resolve, reject) => {
+    Counter.findById('url_id')
     .then((data) => {
       return data.seq;
     })
@@ -60,13 +61,15 @@ exports.addNewUrl = (url) => {
         url: url,
       });
 
-      newUrl.save((err, data) => {
+      newUrl.save((err) => {
         if (err) console.log(err);
+        const shortUrl = `/api/shorturl/${count}`;
         
-        Counter.findOneAndUpdate(countFilter, update, (err, data) => {
+        Counter.findOneAndUpdate(countFilter, update, (err) => {
           if (err) console.log(err);
-          return data;
+          resolve(shortUrl);
         });
       });
     });
+  });
 };
