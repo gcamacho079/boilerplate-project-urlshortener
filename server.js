@@ -30,16 +30,17 @@ var getHostname = function (url) {
 // you should mount the body-parser here
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.post('/api/shorturl/new', urlencodedParser, function (req, res) {
-  var url = getHostname(req.body.url);
+  const appHost = req.get('host');
+  var host = getHostname(req.body.url);
   var options = {
     all: true,
   };
   
-  dns.lookup(url, options, function (err, addresses, family) {
+  dns.lookup(host, options, function (err, addresses, family) {
     if (err) console.log(err);
-    db.addNewUrl(url)
-      .then((url) => {
-        res.send('the new url is ' + url);
+    db.addNewUrl(host)
+      .then((route) => {
+        res.send(`Your short URL is ${appHost}${route}`);
       });    
   });
 })

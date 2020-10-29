@@ -1,6 +1,5 @@
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-mongoose.set('useFindAndModify', false);
 
 const schema = new mongoose.Schema({ 
   url: String,
